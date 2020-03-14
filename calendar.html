@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+
+    <meta charset="utf-8" />
+    <title>
+        Calendar
+    </title>
+    <h1>
+        Helen & Zach's Calendar
+    </h1>
+    <head>
+        <script src= http://classes.engineering.wustl.edu/cse330/content/calendar.min.js></script>
+        <script src=calendar.css></script>
+    </head>
+
+<style>
+head{
+    text-align: center;
+    }
+body{
+    background:#9adef8
+}
+.calendar{
+    text-align: center;
+}
+
+table{
+    margin: auto;
+}
+th{
+    border-left:10px solid rgb(83, 54, 243);
+    border-right:10px solid rgb(83, 54, 243);
+    border-bottom:10px solid rgb(83, 54, 243);
+    border-top:10px solid rgb(83, 54, 243);
+    width:200px;
+    height:75px;
+    font-size: 200%
+}
+td{
+    width:200px;
+    height:75px;
+    font-size: 260%;
+    border-left:5px solid rgb(241, 107, 29);
+    border-right:5px solid rgb(241, 107, 29);
+    border-bottom:5px solid rgb(241, 107, 29);
+    border-top:5px solid rgb(241, 107, 29);
+}
+
+
+</style>
+
+    <body>
+        <!-- Log in -->
+    <h1> Registered User log in</h1>
+    <form action = "login.php" method = "POST">
+        <label>Username: </label>
+        <input type="text" name="username" id="username" />
+        <label>Password:</label>
+        <input type = "password" name="password" id="password">
+        <button id = "loginbtn">Log In</button>
+    </form>
+        <!-- register -->
+        <h1> Register</h1>
+        <!--Register new user-->
+    <form action="register.php" method="POST">
+            <label>New User: Please create a username</label>
+            <input type="text" name="username" id="username" />
+            <label>Password:</label>
+            <input type="password" name="password" id="password">
+            <label>Re-enter Password:</label>
+            <input type="password" name="repass" id="repass">
+            <button id = "registerbtn">Log In</button>
+    </form>
+
+
+    <div id="calendar" class="calendar">
+        <ul>
+            <li class="prev">
+              <button id="previousbutton">&#10094;</button>
+            </li>
+            <li>
+              <button id="nextbutton" class="next">&#10095;</button>
+            </li>
+            <li id="MonthHeader">
+            </li>
+          </ul>
+          <span id="YearHeader" style="font-size:20px"></span>
+        <table id="calendar">
+            <tr>
+                <th>Sunday</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+            </tr>
+        </table>
+    </div>
+
+    </body>
+ 
