@@ -8,21 +8,22 @@ body{
 table{
     margin: auto;
 }
-th{
-    border-left:10px solid rgb(83, 54, 243);
-    border-right:10px solid rgb(83, 54, 243);
-    border-bottom:10px solid rgb(83, 54, 243);
-    border-top:10px solid rgb(83, 54, 243);
+
+.month th{
+    border-left:5px solid rgb(83, 54, 243);
+    border-right:5px solid rgb(83, 54, 243);
+    border-bottom:5px solid rgb(83, 54, 243);
+    border-top:5px solid rgb(83, 54, 243);
     width:200px;
     height:75px;
     font-size: 200%
 }
-td{
+.month td{
+    border-left:5px solid rgb(83, 54, 243);
+    border-right:5px solid rgb(83, 54, 243);
+    border-bottom:5px solid rgb(83, 54, 243);
+    border-top:5px solid rgb(83, 54, 243);
     width:200px;
     height:75px;
-    font-size: 260%;
-    border-left:5px solid rgb(241, 107, 29);
-    border-right:5px solid rgb(241, 107, 29);
-    border-bottom:5px solid rgb(241, 107, 29);
-    border-top:5px solid rgb(241, 107, 29);
+    font-size: 200%
 }

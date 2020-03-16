@@ -9,7 +9,8 @@
     </h1>
     <head>
         <script src= http://classes.engineering.wustl.edu/cse330/content/calendar.min.js></script>
-        <script src=calendar.css></script>
+        <script src=calendar.js></script>
+        <link rel="stylesheet" type="text/css" href="calendar.css">
     </head>
 
 <style>
@@ -50,7 +51,7 @@ td{
 
     <body>
         <!-- Log in -->
-    <h1> Registered User log in</h1>
+    <b> Registered User log in</b>
     <form action = "login.php" method = "POST">
         <label>Username: </label>
         <input type="text" name="username" id="username" />
@@ -59,7 +60,7 @@ td{
         <button id = "loginbtn">Log In</button>
     </form>
         <!-- register -->
-        <h1> Register</h1>
+        <b> Register</b>
         <!--Register new user-->
     <form action="register.php" method="POST">
             <label>New User: Please create a username</label>
@@ -72,19 +73,19 @@ td{
     </form>
 
 
-    <div id="calendar" class="calendar">
+    <div id="month" class="month">
         <ul>
             <li class="prev">
               <button id="previousbutton">&#10094;</button>
             </li>
             <li>
-              <button id="nextbutton" class="next">&#10095;</button>
+              <button id="nextbutton">&#10095;</button>
             </li>
-            <li id="MonthHeader">
+            <li id="Month">
             </li>
           </ul>
-          <span id="YearHeader" style="font-size:20px"></span>
-        <table id="calendar">
+          <span id="Year" style="font-size:20px"></span>
+        <table id="days">
             <tr>
                 <th>Sunday</th>
                 <th>Monday</th>
@@ -96,6 +97,12 @@ td{
             </tr>
         </table>
     </div>
+
+    <div id="table">
+        <table id="calendar">
+        </table>
+    </div>
+
 
     </body>
  
