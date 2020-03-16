@@ -21,66 +21,61 @@ document.addEventListener('DOMContentLoaded', function (event) {
 	var weeks = currentMonth.getWeeks();
 	let calendar = document.getElementById('calendar');
 	calendar.innerHTML = "";
-	// create a new row for each week
+
 	for (var w in weeks) {
 	  let thisWeek = document.createElement('tr');
 	  var days = weeks[w].getDates();
-	  // days contains normal JavaScript Date objects by creating a new cell for each day
 	  for (var d in days) {
 		var today = document.createElement('td');
-		// making the cells which have dates not belonging to the month blank
 		if (days[d].getMonth() != currentMonth.month) {
 		  today.appendChild(document.createTextNode(" "));
 		}
 		else {
-		  // populating each cell with info from days array
 		  today.setAttribute("id", "day" + days[d].getDate())
+		  today.setAttribute("href", "");
 		  today.appendChild(document.createTextNode(days[d].getDate()));
 		}
 		thisWeek.appendChild(today);
-		// You can see console.log() output in your JavaScript debugging tool, like Firebug,
-		// WebWit Inspector, or Dragonfly.
 	  }
 	  calendar.appendChild(thisWeek);
 	}
   }
   
 
+//  function nextMonth(today){
+//   currentMonth = currentMonth.nextMonth();
+//  }
 
-function nextMonth(today){
- //currentYear = (currentMonth === 11) ? currentYear + 1 : currentYear;
- currentMonth = currentMonth.nextMonth();
-  document.getElementById('Month').innerHTML = months[currentMonth.month];
-  document.getElementById('Year').innerHTML = currentMonth.year;
- //updateCalendar(currentMonth, currentYear);
-}
-
-function prevMonth(today){
-     currentYear = (currentMonth === 0) ? currentYear - 1 : currentYear;
-     currentMonth = currentMonth.prevMonth();
-     updateCalendar(currentMonth, currentYear);
-}
-
-$(function () {
- $("#nextbutton").on("click", () => {
-   nextMonth();
-   updateCalendar();
+// function prevMonth(today){
+//   currentMonth = currentMonth.prevMonth(); 
   
- })
- $("#previousbutton").on("click", () => {
-   prevMonth();
-   updateCalendar();
+// }
 
- })
-  })
+// $(function () {
+//  $("#nextbutton").on("click", () => {
+//    nextMonth();
+//    updateCalendar();
+  
+//  })
+//  $("#previousbutton").on("click", () => {
+//    prevMonth();
+//    updateCalendar();
 
+//  })
+//   })
+
+// Change the month when the "next" button is pressed
+document.getElementById("nextbutton").addEventListener("click", function (event) {
+	currentMonth = currentMonth.nextMonth(); // Previous month would be currentMonth.prevMonth()
+	updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+}, false);
+// Change the month when the "previous" button is pressed
+document.getElementById("previousbutton").addEventListener("click", function (event) {
+	currentMonth = currentMonth.prevMonth();
+	updateCalendar();
+}, false);
 
   
-function jump(today){
-
-
-}
-
 
 
 

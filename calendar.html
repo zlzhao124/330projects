@@ -50,41 +50,18 @@ td{
 </style>
 
     <body>
-        <!-- Log in -->
-    <b> Registered User log in</b>
-    <form action = "login.php" method = "POST">
-        <label>Username: </label>
-        <input type="text" name="username" id="username" />
-        <label>Password:</label>
-        <input type = "password" name="password" id="password">
-        <button id = "loginbtn">Log In</button>
-    </form>
-        <!-- register -->
-        <b> Register</b>
-        <!--Register new user-->
-    <form action="register.php" method="POST">
-            <label>New User: Please create a username</label>
-            <input type="text" name="username" id="username" />
-            <label>Password:</label>
-            <input type="password" name="password" id="password">
-            <label>Re-enter Password:</label>
-            <input type="password" name="repass" id="repass">
-            <button id = "registerbtn">Log In</button>
-    </form>
-
-
+       
     <div id="month" class="month">
         <ul>
             <li class="prev">
-              <button id="previousbutton">&#10094;</button>
+              <button id="previousbutton">Previous Month &#10094;</button>
             </li>
             <li>
-              <button id="nextbutton">&#10095;</button>
+              <button id="nextbutton">Next Month&#10095;</button>
             </li>
-            <li id="Month">
-            </li>
-          </ul>
-          <span id="Year" style="font-size:20px"></span>
+        </ul>
+        <h2> Current Month:</h2><span id="Month" style="font-size:30px"></span>  
+          <span id="Year" style="font-size:30px"></span>
         <table id="days">
             <tr>
                 <th>Sunday</th>
