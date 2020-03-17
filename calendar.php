@@ -82,8 +82,8 @@ td{
         <div id="dialog">
                         <h1>Add Event</h1>
                         Event:<input type="text" name="title" id="title">
-                        Date:<input type="number" name="date" id="date" step = "1">
-        <!--            Time:<input type="time" name="time" id="time"> -->
+                        Date:<input type="date" name="date" id="date" >
+                        Time:<input type="time" name="time" id="time"> 
                         Notes:<textarea name="description" id="description"></textarea>
 
                         <input type="submit" name="Add Event" value="Add Event" id="add_event_btn">
@@ -141,7 +141,7 @@ document.getElementById("add_event_trigger").addEventListener("click", opendialo
 function addevent(event){
   const t = document.getElementById("title").value;
   const d = document.getElementById("date").value;        
-//const time = document.getElementById("time").value;
+  const time = document.getElementById("time").value;
   const notes = document.getElementById("description").value;
   const dataString = "title=" + encodeURIComponent(t) + "&date=" + encodeURIComponent(d)  + "&notes=" + encodeURIComponent(notes);
   var xmlHttp = new XMLHttpRequest();
