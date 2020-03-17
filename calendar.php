@@ -37,7 +37,7 @@ head{
     text-align: center;
     }
 body{
-    background:#9adef8
+    background:url(bkgnd.jpg);
 }
 .calendar{
     text-align: center;
@@ -47,24 +47,25 @@ table{
     margin: auto;
 }
 th{
-    border-left:10px solid rgb(83, 54, 243);
-    border-right:10px solid rgb(83, 54, 243);
-    border-bottom:10px solid rgb(83, 54, 243);
-    border-top:10px solid rgb(83, 54, 243);
-    width:200px;
+    border-left:8px solid rgb(117, 49, 106);
+    border-right:8px groove rgb(170, 158, 236);
+    border-bottom:8px groove rgb(170, 158, 236);
+    border-top:8px groove rgb(117, 49, 106);
+
+    width:180px;
     height:75px;
     font-size: 200%
 }
 td{
-    width:200px;
+    width:180px;
     height:75px;
     font-size: 260%;
-    border-left:5px solid rgb(241, 107, 29);
-    border-right:5px solid rgb(241, 107, 29);
-    border-bottom:5px solid rgb(241, 107, 29);
-    border-top:5px solid rgb(241, 107, 29);
-}
-
+   
+    border-left:8px solid rgb(66, 14, 73);;
+    border-right:8px groove rgb(170, 158, 236);
+    border-bottom:8px groove rgb(170, 158, 236);
+    border-top:8px groove  rgb(66, 14, 73);
+   
 
 </style>
 

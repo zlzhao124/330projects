@@ -1,5 +1,4 @@
 <?php
-
         require 'database.php';
         //insert user to new database
         session_start();
