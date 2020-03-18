@@ -8,6 +8,7 @@
         Helen & Zach's Calendar
     </h1>
     <head>
+    
 
         <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/start/jquery-ui.css" type="text/css" rel="Stylesheet">
         <!-- We need the style sheet linked above or the dialogs/other parts of jquery-ui won't display correctly!-->
@@ -92,6 +93,14 @@ td{
                         <input type="hidden" id="csrf_token">
         </div>
 
+      <div>
+      <h2>Delete Event</h2>
+      <textarea name="delete_events" cols="50" rows="1" id="delete_events" placeholder="Enter the name of the event you wanted to delete"
+        required></textarea>
+      <br />
+      <button id="delete_btn" value="Delete">Delete </button>
+      <br />
+    </div>
 
 
     <div id="register">

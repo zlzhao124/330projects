@@ -1,5 +1,4 @@
 <?php
-
   require 'database.php';
   header("Content-Type: application/json");
   // session cookie http only
@@ -44,6 +43,7 @@
   ));
   exit;
   }
+  
   else {
     echo json_encode(array(
       "success" => true,
