@@ -22,7 +22,7 @@ if(!$stmt){
 
 if (strlen($title)>0){
     $stmt->bind_param('sssss', $title, $date, $time, $username, $notes);
-    $stmt->execute();
+    
     if (!$stmt->execute()){
     echo json_encode(array(
       "success" => false,

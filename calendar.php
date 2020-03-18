@@ -15,7 +15,7 @@
         <!-- The main library. Note: must be listed before the jquery-ui library -->
         <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js"></script>
         <!-- jquery-UI hosted on Google's Ajax CDN-->
-        <link rel = "stylesheet" type = "text/css" href="login.css">
+       
         <script src="http://classes.engineering.wustl.edu/cse330/content/calendar.min.js" type="text/javascript"></script>
         <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
        <!-- <script src=calendar.js></script> -->
@@ -23,7 +23,6 @@
     </head>
 
 <style>
-
 #dialog{
     display: none
 }
@@ -42,16 +41,14 @@ body{
 .calendar{
     text-align: center;
 }
-
 table{
     margin: auto;
 }
-th{
+th{ 
     border-left:8px solid rgb(117, 49, 106);
     border-right:8px groove rgb(170, 158, 236);
     border-bottom:8px groove rgb(170, 158, 236);
     border-top:8px groove rgb(117, 49, 106);
-
     width:180px;
     height:75px;
     font-size: 200%
@@ -60,14 +57,15 @@ td{
     width:180px;
     height:75px;
     font-size: 260%;
-   
+
     border-left:8px solid rgb(66, 14, 73);;
     border-right:8px groove rgb(170, 158, 236);
     border-bottom:8px groove rgb(170, 158, 236);
     border-top:8px groove  rgb(66, 14, 73);
-   
 
+}
 </style>
+
 
     <body>
 
@@ -82,8 +80,9 @@ td{
         <div id="dialog">
                         <h1>Add Event</h1>
                         Event:<input type="text" name="title" id="title">
-                        Date:<input type="date" name="date" id="date" >
-                        Time:<input type="time" name="time" id="time"> 
+               <!--     Date:<input type="number" name="date" id="date" step = "1"> -->
+                        Date: <input type="date" name="date" id="date" >
+                        Time:<input type="time" name="time" id="time">
                         Notes:<textarea name="description" id="description"></textarea>
 
                         <input type="submit" name="Add Event" value="Add Event" id="add_event_btn">
@@ -103,6 +102,7 @@ td{
     </div>
 
         <br><br><br>
+
     <div id="login">
         <b>Login:</b>
         <input type="text" id="username" placeholder="Username" />
@@ -123,7 +123,10 @@ td{
 
 
 
-<script> 
+<script>
+
+var logged_in = false;
+ 
 function opendialog(event){
         $("#dialog").css("display", "inline");
         $("#save_changes_btn").css("display", "none");
@@ -141,9 +144,10 @@ document.getElementById("add_event_trigger").addEventListener("click", opendialo
 function addevent(event){
   const t = document.getElementById("title").value;
   const d = document.getElementById("date").value;        
+  
   const time = document.getElementById("time").value;
   const notes = document.getElementById("description").value;
-  const dataString = "title=" + encodeURIComponent(t) + "&date=" + encodeURIComponent(d)  + "&notes=" + encodeURIComponent(notes);
+  const dataString = "title=" + encodeURIComponent(t) + "&date=" + encodeURIComponent(d)  + "&time=" + encodeURIComponent(time)  + "&notes=" + encodeURIComponent(notes);
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.open("POST", "addevent.php", true);
   xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
@@ -151,8 +155,11 @@ function addevent(event){
     var jsonData = JSON.parse(event.target.responseText);
     if (jsonData.success) {
       alert("Event Added!");
-        $("#dialog").css("display", "none");
-        $('#dialog').dialog('close');
+//      alert(d2.getMonth());
+//      alert(d2.getDate());
+      updateCalendar();
+      $("#dialog").css("display", "none");
+      $('#dialog').dialog('close');
     }
     else {
       alert("Could not add event. "+jsonData.message);
@@ -164,15 +171,17 @@ document.getElementById("add_event_btn").addEventListener("click", addevent, fal
 
 
 function loggedin(username) {
+            logged_in = true;
             $("#login").css("display", "none");
             $("#register").css("display", "none");
             document.getElementById("welcomeMessage").textContent = "Hello our dear user, " + username + "! Welcome to the calendar!";
             $("#welcomeMessage").css("display", "inline");
             $("#logout").css("display", "inline");
             $("#add_event_trigger").css("display", "inline");
+            updateCalendar();
         }
 
-//taken from the wiki
+
 function loginAjax(event) {
     const username = document.getElementById("username").value; // Get the username from the form
     const password = document.getElementById("password").value; // Get the password from the form
@@ -201,6 +210,7 @@ function registerAjax(event) {
 
   const dataString = "username=" + encodeURIComponent(newuser) + "&pass=" + encodeURIComponent(newpass);
 
+    
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.open("POST", "register.php", true);
   xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
@@ -238,12 +248,12 @@ function logoutAjax(event) {
     }
   }, false);
   xmlHttp.send(null);
+  logged_in = false;
+  updateCalendar();
 }
 document.getElementById('logout').addEventListener('click', logoutAjax, false);
 
-
-
-function checkforlogin(event) {
+  function checkforlogin(event) {
   
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.open("POST", "checklogin.php", true);
@@ -286,5 +296,4 @@ document.getElementById("prev_month_btn").addEventListener("click", function(eve
 
     </body>
     </html>
-
 
