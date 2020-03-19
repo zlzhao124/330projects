@@ -1,31 +1,53 @@
 <?php
 require 'database.php';
-ini_set("session.cookie_httponly", 1);
-session_start();
+
 header("Content-Type: application/json");
 
-//Because you are posting the data via fetch(), php has to retrieve it elsewhere.
-$json_str = file_get_contents('php://input');
-//This will store the data into an associative array
-$json_obj = json_decode($json_str, true);
+session_start();
+$username = $_SESSION['username'];
 
+$title = $_POST['title'];
+$time = $_POST['time'];
+$notes = $_POST['notes'];
+$eventid = $_POST['original_id'];
 
-//Variables can be accessed as such:
+$eventdate = substr($eventid, 5, 15);
+//echo($eventdate);
+$eventitle = substr($eventid, 16);
+//echo($eventitle);
 
-  $date = $_POST['date'];
-  $month = $_POST['month'];
-  $year = $_POST['year'];
+$stmt = $mysqli->prepare("update events set title = ?, time = ?, description = ? WHERE title = ? AND date = ? AND user = ?");
 
-$stmt2 = $mysqli->prepare("UPDATE events SET event=?, date=?, month = ?, year = ?, time=? where event = ?");
-If(!$stmt2) {
+if(!$stmt){
     printf("Query Prep Failed: %s\n", $mysqli->error);
     exit;
 }
-$stmt2->bind_param('siiiss', $newName, $day, $month, $year , $newTime, $oldName);
-$stmt2->execute();
-$stmt2->close();
-echo json_encode(array(
-    "success" => true
-));
-exit;
+  // Check the username that was entered to make sure that it is not a duplicate, and that both the username and password are nonempty string
+
+if (strlen($title)>0){
+    $stmt->bind_param('ssssss', $title, $time, $notes, $eventitle, $eventdate, $username);
+
+    if (!$stmt->execute()){
+    echo json_encode(array(
+      "success" => false,
+      "message" => "Unable to edit event!"
+    ));
+
+}
+else{
+   echo json_encode(array("success" => true));
+}
+
+    $stmt->close();
+    exit;
+}
+
+else{
+ echo json_encode(array(
+      "success" => false,
+      "message" => "Event edit invalid"
+    ));
+$stmt->close();
+    exit;
+}
 ?>
