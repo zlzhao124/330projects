@@ -138,17 +138,17 @@ Move to:<input id='move' type="text" name="move" placeholder="mm/yyyy" />
 
   document.getElementById('move').addEventListener("keyup", Move, false);
 
-//Change the current month
+  //move to another month
 function Move() {
-    if (/^\d{2}\/\d{4}$/.test($("#move").val()) && Number($("#move").val().substr(0, 2)) < 13 && Number($("#move").val().substr(0, 2)) > 0 && Number($("#move").val().substr(3, 4)) >= 1500 && Number($("#move").val().substr(3, 4)) <= 2500) {
+    if (/^\d{2}\/\d{4}$/.test($("#move").val()) && Number($("#move").val().substr(0, 2)) < 13 && Number($("#move").val().substr(0, 2)) > 0 && Number($("#move").val().substr(3, 4)) >= 2000 && Number($("#move").val().substr(3, 4)) <= 3000) {
         let count = Number($("#move").val().substr(3, 4)) - currentMonth.year;
         count = count* 12;
         count = count + (Number($("#move").val().substr(0, 2)) - currentMonth.month) - 1;
         if (count < 0) {
-            for (; count < 0; count++)
+            for (; count < 0; count=count+1)
                 currentMonth = currentMonth.prevMonth();
         } else {
-            for (; count > 0; count--)
+            for (; count > 0; count=count-1)
                 currentMonth = currentMonth.nextMonth();
         }
     }
