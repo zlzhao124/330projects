@@ -25,7 +25,7 @@
 
 <style>
 #dialog{
-    display: none
+    color:red;
 }
 #logout{
     display: none
@@ -42,6 +42,7 @@ body{
 .calendar{
     text-align: center;
 }
+
 table{
     margin: auto;
 }
@@ -65,12 +66,18 @@ td{
     border-top:8px groove  rgb(66, 14, 73);
 
 }
+input
+{
+  color:red;
+}
+
 </style>
 
 
     <body>
 
 <p id="welcomeMessage" class="welcomeMessage"></p>
+
 
 <br><br>
 
@@ -81,7 +88,6 @@ td{
         <div id="dialog">
                         <h1>Add Event</h1>
                         Event:<input type="text" name="title" id="title">
-               <!--     Date:<input type="number" name="date" id="date" step = "1"> -->
                         Date: <input type="date" name="date" id="date" >
                         Time:<input type="time" name="time" id="time">
                         Notes:<textarea name="description" id="description"></textarea>
@@ -91,16 +97,12 @@ td{
                         <input type="submit" value="Delete Event" id="delete_event_btn">
                         <input type="hidden" id="single_event_id">
                         <input type="hidden" id="csrf_token">
+
         </div>
 
-      <div>
-      <h2>Delete Event</h2>
-      <textarea name="delete_events" cols="50" rows="1" id="delete_events" placeholder="Enter the name of the event you wanted to delete"
-        required></textarea>
-      <br />
-      <button id="delete_btn" value="Delete">Delete </button>
-      <br />
-    </div>
+      
+
+
 
 
     <div id="register">
@@ -120,6 +122,8 @@ td{
     </div>
 
          <h2 id="displaymonth"></h2>
+
+Move to:<input id='move' type="text" name="move" placeholder="mm/yyyy" />
          <button id="prev_month_btn">Previous Month &#10094;</button>
          <button id="next_month_btn">Next Month&#10095;</button>
 
@@ -130,9 +134,28 @@ td{
     </div>
 
 
-
-
 <script>
+
+  document.getElementById('move').addEventListener("keyup", Move, false);
+
+//Change the current month
+function Move() {
+    if (/^\d{2}\/\d{4}$/.test($("#move").val()) && Number($("#move").val().substr(0, 2)) < 13 && Number($("#move").val().substr(0, 2)) > 0 && Number($("#move").val().substr(3, 4)) >= 1500 && Number($("#move").val().substr(3, 4)) <= 2500) {
+        let count = Number($("#move").val().substr(3, 4)) - currentMonth.year;
+        count = count* 12;
+        count = count + (Number($("#move").val().substr(0, 2)) - currentMonth.month) - 1;
+        if (count < 0) {
+            for (; count < 0; count++)
+                currentMonth = currentMonth.prevMonth();
+        } else {
+            for (; count > 0; count--)
+                currentMonth = currentMonth.nextMonth();
+        }
+    }
+    updateCalendar();
+}
+
+
 
 var logged_in = false;
  
