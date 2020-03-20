@@ -72,12 +72,9 @@ input
 }
 
 </style>
-
-
     <body>
 
 <p id="welcomeMessage" class="welcomeMessage"></p>
-
 
 <br><br>
 
@@ -86,22 +83,20 @@ input
     <button id="add_event_trigger" >Add Event</button>
 
         <div id="dialog">
-                        <h1>Add Event</h1>
-                        Event:<input type="text" name="title" id="title">
-                        Date: <input type="date" name="date" id="date" >
-                        Time:<input type="time" name="time" id="time">
-                        Notes:<textarea name="description" id="description"></textarea>
+                        <h1>Add/Edit Event</h1>
+                <!--    Enter Event Title, Date, Time, and Description here!<br>-->
+                        Title:<input type="text" name="title" id="title">
+               <!--     Date:<input type="number" name="date" id="date" step = "1"> -->
+                        <input type="date" name="date" id="date" >
+                        <input type="time" name="time" id="time">
+                        Description:<textarea name="description" id="description"></textarea>
 
                         <input type="submit" name="Add Event" value="Add Event" id="add_event_btn">
                         <input type="submit" value="Save Changes" id="save_changes_btn">
                         <input type="submit" value="Delete Event" id="delete_event_btn">
                         <input type="hidden" id="single_event_id">
                         <input type="hidden" id="csrf_token">
-
         </div>
-
-      
-
 
 
 
@@ -121,11 +116,17 @@ input
         <button id="login_btn">Log In</button>
     </div>
 
-         <h2 id="displaymonth"></h2>
-
-Move to:<input id='move' type="text" name="move" placeholder="mm/yyyy" />
+             <h2 id="displaymonth"></h2>
          <button id="prev_month_btn">Previous Month &#10094;</button>
          <button id="next_month_btn">Next Month&#10095;</button>
+
+ <!--   <div id="quicklymove">
+         Month:<input type="number" name="mo" id="mo" step = "1">
+         Year:<input type="number" name="yr" id="yr" step = "1">
+         <button id="quickmove">Move to this month!</button>
+    </div>-->
+
+Move to:<input id='move' type="text" name="move" placeholder="mm/yyyy" />
 
 <script type="text/javascript" src="updatecalendar.js"></script>
     <div id="table">
@@ -134,28 +135,9 @@ Move to:<input id='move' type="text" name="move" placeholder="mm/yyyy" />
     </div>
 
 
+
+
 <script>
-
-  document.getElementById('move').addEventListener("keyup", Move, false);
-
-  //move to another month
-function Move() {
-    if (/^\d{2}\/\d{4}$/.test($("#move").val()) && Number($("#move").val().substr(0, 2)) < 13 && Number($("#move").val().substr(0, 2)) > 0 && Number($("#move").val().substr(3, 4)) >= 2000 && Number($("#move").val().substr(3, 4)) <= 3000) {
-        let count = Number($("#move").val().substr(3, 4)) - currentMonth.year;
-        count = count* 12;
-        count = count + (Number($("#move").val().substr(0, 2)) - currentMonth.month) - 1;
-        if (count < 0) {
-            for (; count < 0; count=count+1)
-                currentMonth = currentMonth.prevMonth();
-        } else {
-            for (; count > 0; count=count-1)
-                currentMonth = currentMonth.nextMonth();
-        }
-    }
-    updateCalendar();
-}
-
-
 
 var logged_in = false;
  
@@ -163,17 +145,20 @@ function opendialog(event){
         $("#dialog").css("display", "inline");
         $("#save_changes_btn").css("display", "none");
         $("#delete_event_btn").css("display", "none");
-
+        $("#date").css("display", "inline");
+        $("#add_event_btn").css("display", "inline");
+/*
         $("#dialog").dialog({
                 title: "Add Event",
                 draggable: true
                 
-        });
+        });*/
 
 }
 document.getElementById("add_event_trigger").addEventListener("click", opendialog, false);
 
 function addevent(event){
+ // $("#save_changes_btn").css("display", "none");
   const t = document.getElementById("title").value;
   const d = document.getElementById("date").value;        
   
@@ -200,6 +185,9 @@ function addevent(event){
   xmlHttp.send(dataString);
 }
 document.getElementById("add_event_btn").addEventListener("click", addevent, false);
+
+
+//document.getElementById("save_changes_btn").addEventListener("click", editevent, false);
 
 
 function loggedin(username) {
@@ -242,7 +230,6 @@ function registerAjax(event) {
 
   const dataString = "username=" + encodeURIComponent(newuser) + "&pass=" + encodeURIComponent(newpass);
 
-    
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.open("POST", "register.php", true);
   xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
@@ -285,7 +272,9 @@ function logoutAjax(event) {
 }
 document.getElementById('logout').addEventListener('click', logoutAjax, false);
 
-  function checkforlogin(event) {
+
+
+function checkforlogin(event) {
   
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.open("POST", "checklogin.php", true);
@@ -308,6 +297,13 @@ document.getElementById('logout').addEventListener('click', logoutAjax, false);
 }
 document.addEventListener("DOMContentLoaded", checkforlogin, false);
 
+
+$(".deletebuttons").click(function(){
+     alert("poggers");
+ });
+
+
+
 // For our purposes, we can keep the current month in a variable in the global scope
 var currentMonth = new Month(2020, 2); // March 2020
 updateCalendar();//loads the calendar immediately 
@@ -321,8 +317,41 @@ document.getElementById("next_month_btn").addEventListener("click", function(eve
 document.getElementById("prev_month_btn").addEventListener("click", function(event){
         currentMonth = currentMonth.prevMonth(); // Previous month would be currentMonth.prevMonth()
         updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
-        //alert("The new month is "+currentMonth.month+" "+currentMonth.year);
+
 }, false);
+
+
+
+  document.getElementById('move').addEventListener("keyup", Move, false);
+//Change the current month
+function Move() {
+
+//if ($("#move").length == 7){
+
+
+    if (/^\d{2}\/\d{4}$/.test($("#move").val()) && Number($("#move").val().substr(0, 2)) < 13 && Number($("#move").val().substr(0, 2)) > 0 && Number($("#move").val().substr(3, 4)) >= 1500 && Number($("#move").val().substr(3, 4)) <= 2500) {
+        let count = Number($("#move").val().substr(3, 4)) - currentMonth.year;
+        count = count* 12;
+        count = count + (Number($("#move").val().substr(0, 2)) - currentMonth.month) - 1;
+        if (count < 0) {
+            for (; count < 0; count++)
+                currentMonth = currentMonth.prevMonth();
+        } else {
+            for (; count > 0; count--)
+                currentMonth = currentMonth.nextMonth();
+        }
+    }
+    updateCalendar();
+
+}
+
+
+
+
+
+
+
+
 </script>
 
 
