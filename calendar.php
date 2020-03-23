@@ -176,7 +176,7 @@ function addevent(event){
 //      alert(d2.getDate());
       updateCalendar();
       $("#dialog").css("display", "none");
-      $('#dialog').dialog('close');
+      //$('#dialog').dialog('close');
     }
     else {
       alert("Could not add event. "+jsonData.message);
