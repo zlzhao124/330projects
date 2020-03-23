@@ -8,11 +8,12 @@
   $date = $_POST['date'];
   $month = $_POST['month'];
   $year = $_POST['year'];
-
+  $category = $_POST['category'];
   $date2 = strval($year)."-".strval($month)."-".strval($date);
 
   $cdate = date('Y-m-d', strtotime($date2));
 
+if ($category == "All"){
   $stmt = $mysqli->prepare("select * from events where user =? and date=?");
   if(!$stmt){
       echo json_encode(array(
@@ -22,6 +23,23 @@
       exit;
   }
   $stmt->bind_param('ss', $username, $cdate);
+ }
+
+else{
+
+  $stmt = $mysqli->prepare("select * from events where user =? and date=? and category = ?");
+  if(!$stmt){
+      echo json_encode(array(
+        "success" => false,
+        "message" => $mysqli->error,
+      ));
+      exit;
+  }
+  $stmt->bind_param('sss', $username, $cdate, $category);
+
+
+}  
+
 
   $stmt->execute();
   $result = $stmt->get_result();
@@ -32,7 +50,8 @@
      array_push($events, array(
        "title" => $row['title'],
        "time" => $row['time'],
-       "description" => $row['description'],
+       "user" => $row['user'],
+       "category" => $row['category'],
        "date" => $row['date']
      ));
   }

@@ -13,7 +13,7 @@ $date = $_POST['date'];
 $time = $_POST['time'];
 $notes = $_POST['notes'];
 
-$stmt = $mysqli->prepare("insert into events (title, date, time, user, description) values (?, ?, ?, ?, ?)");
+$stmt = $mysqli->prepare("insert into events (title, date, time, user, category) values (?, ?, ?, ?, ?)");
 if(!$stmt){
     printf("Query Prep Failed: %s\n", $mysqli->error);
     exit;

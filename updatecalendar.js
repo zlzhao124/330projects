@@ -5,7 +5,8 @@ let startyear = today.getFullYear();
 let daysWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 let calendar = document.getElementById("calendar");
-
+let editcount = 0;
+let setupcount = 0;
 function updateCalendar() {
         $('calendar').remove(); //was advised by previous 330 students to remove the calendar object and create a new one
         var weeks = currentMonth.getWeeks();
@@ -47,13 +48,47 @@ function updateCalendar() {
         }
         cal.appendChild(table_body);
         body.appendChild(cal);
+//      document.getElementById("save_changes_btn").removeEventListener("click");
 }
 
 function getEvents(day) {
         if (logged_in === true) {
+
+                var v1 =  document.getElementById('id1');
+                var v2 =  document.getElementById('id2');
+                var v3 =  document.getElementById('id3');
+                var v4 =  document.getElementById('id4');
+                var v5 =  document.getElementById('id5');
+                var v6 =  document.getElementById('id6');
+                var v7 =  document.getElementById('id7');
+                var category = document.getElementById('id7');
+
+                if (v1.checked == true){
+                        category = document.getElementById('id1');
+                }
+                if (v2.checked == true){
+                        category = document.getElementById('id2');
+                }
+                if (v3.checked == true){
+                        category = document.getElementById('id3');
+                }
+                if (v4.checked == true){
+                        category = document.getElementById('id4');
+                }
+                if (v5.checked == true){
+                        category = document.getElementById('id5');
+                }
+                if (v6.checked == true){
+                        category = document.getElementById('id6');
+                }
+                if (v7.checked == true){
+                        category = document.getElementById('id7');
+                }
+                var category_value = category.value;
+//              alert(category_value);
                 cmonth = currentMonth.month + 1;
                 cyear = currentMonth.year;
-                var dataString = "date=" + encodeURIComponent(day) + "&month=" + encodeURIComponent(cmonth) + "&year=" + encodeURIComponent(cyear);
+                var dataString = "date=" + encodeURIComponent(day) + "&month=" + encodeURIComponent(cmonth) + "&year=" + encodeURIComponent(cyear) + "&category=" + encodeURIComponent(category_value);
                 var xmlHttp = new XMLHttpRequest();
                 xmlHttp.open("POST", "displevents.php", true);
                 xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
@@ -72,7 +107,7 @@ function getEvents(day) {
                                                 button_IDs[i] = i;
                                                 ebutton_IDs[i] = i;
                                                 var eventdiv = document.createElement("div");
-                                                eventdiv.appendChild(document.createTextNode(jsonData.events[i].title + " " + jsonData.events[i].time));
+                                                eventdiv.appendChild(document.createTextNode(jsonData.events[i].title + " " + jsonData.events[i].time + " Category: " + jsonData.events[i].category));
                                                 eventdiv.setAttribute("class", "events");
                                                 eventdiv.setAttribute("id", jsonData.events[i].title + " " + jsonData.events[i].date);
 
@@ -150,7 +185,12 @@ function deleteEvent(string) {
 }
 
 function editSetup(string, string2) {
+        if (setupcount !== editcount){
+                editcount = setupcount;
+        }
         console.log("b");
+        setupcount++;
+        editcount++;
         opendialog();
         $("#add_event_btn").css("display", "none");
         $("#save_changes_btn").css("display", "inline");
@@ -158,23 +198,22 @@ function editSetup(string, string2) {
         var x = currentMonth.month;
         var y = currentMonth.year;
 
-        //document.getElementById("save_changes_btn").removeEventListener("click");
+ //       document.getElementById("save_changes_btn").removeEventListener("click");
        //document.getElementById("save_changes_btn").setEventListener("click")
         document.getElementById("save_changes_btn").addEventListener("click", function () {
                 // $("#save_changes_btn").css("display", "none");
                 const t = document.getElementById("title").value;
                 const time = document.getElementById("time").value;
-                const notes = document.getElementById("description").value;
-
+                const notes = document.getElementById("category").value;
+                editcount++;
+        //        alert(editcount);
+        //        alert(setupcount);
                 const dataString = "title=" + encodeURIComponent(t) + "&time=" + encodeURIComponent(time) + "&notes=" + encodeURIComponent(notes) + "&original_id=" + encodeURIComponent(string);
-
-                //  document.getElementById("save_changes_btn").addEventListener("click", function(){
+                
+                
                 //alert(dataString);
                 console.log("c");
-                alert(t);
-                alert(time);
-                alert(notes);
-                alert(string);
+                if (setupcount * 2 == editcount){ //to avoid adding too many event listeners and updating the same event over and over, subsequently displaying it over and over
                 var xmlHttp = new XMLHttpRequest();
                 xmlHttp.open("POST", "edit.php", true);
                 xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
@@ -183,18 +222,22 @@ function editSetup(string, string2) {
                         if (jsonData.success) {
                                 alert("Event Updated!");
                                 updateCalendar();
-                        }
-                        else {
+                        }       
+                        else {  
                                 alert("Could not update event. " + jsonData.message);
-                        }
-
+                        }       
+                        
                 }, false);
                 xmlHttp.send(dataString);
                 //updateCalendar();
                 $("#dialog").css("display", "none");
                 //$('#dialog').dialog('close');
-
+                }
+                
                 
         }, false);
+        
+}       
 
-}
+
+

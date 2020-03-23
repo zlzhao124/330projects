@@ -26,9 +26,13 @@
 <style>
 #dialog{
     color:red;
+    display: none
 }
 #logout{
     display: none
+}
+#displayoptions{
+        display: none
 }
 #add_event_trigger{
     display: none
@@ -46,7 +50,7 @@ body{
 table{
     margin: auto;
 }
-th{ 
+th{
     border-left:8px solid rgb(117, 49, 106);
     border-right:8px groove rgb(170, 158, 236);
     border-bottom:8px groove rgb(170, 158, 236);
@@ -89,14 +93,36 @@ input
                <!--     Date:<input type="number" name="date" id="date" step = "1"> -->
                         <input type="date" name="date" id="date" >
                         <input type="time" name="time" id="time">
-                        Description:<textarea name="description" id="description"></textarea>
+                <!--        Description:<textarea name="description" id="description"></textarea> -->
 
+                        <select id = "category" >
+                                <option value = "School">School</option>
+                                <option value = "Work">Work</option>
+                                <option value = "Recreation">Recreation</option>
+                                <option value = "Family">Family</option>
+                                <option value = "Holiday">Holiday</option>
+                                <option value = "Other">Other</option>
+                        </select>
                         <input type="submit" name="Add Event" value="Add Event" id="add_event_btn">
                         <input type="submit" value="Save Changes" id="save_changes_btn">
                         <input type="submit" value="Delete Event" id="delete_event_btn">
                         <input type="hidden" id="single_event_id">
                         <input type="hidden" id="csrf_token">
         </div>
+
+<div id = "displayoptions">
+        <br> <br> <br>
+        Display Events by Category:
+        <br>
+  <input type="radio" name="cat" value="School" id = "id1" required> School<br>
+  <input type="radio" name="cat" value="Work" id = "id2" required> Work<br>
+  <input type="radio" name="cat" value="Recreation" id = "id3" required> Recreation<br>
+ <input type="radio" name="cat" value="Family" id = "id4" required> Family <br>
+<input type="radio" name="cat" value="Holiday" id = "id5" required> Holiday<br>
+<input type="radio" name="cat" value="Other" id = "id6" required> Other<br>
+<input type="radio" name="cat" value="All" id = "id7" required> All Events<br>
+</div>
+
 
 
 
@@ -163,7 +189,7 @@ function addevent(event){
   const d = document.getElementById("date").value;        
   
   const time = document.getElementById("time").value;
-  const notes = document.getElementById("description").value;
+  const notes = document.getElementById("category").value;
   const dataString = "title=" + encodeURIComponent(t) + "&date=" + encodeURIComponent(d)  + "&time=" + encodeURIComponent(time)  + "&notes=" + encodeURIComponent(notes);
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.open("POST", "addevent.php", true);
@@ -192,6 +218,7 @@ document.getElementById("add_event_btn").addEventListener("click", addevent, fal
 
 function loggedin(username) {
             logged_in = true;
+            $("#displayoptions").css("display", "inline");
             $("#login").css("display", "none");
             $("#register").css("display", "none");
             document.getElementById("welcomeMessage").textContent = "Hello our dear user, " + username + "! Welcome to the calendar!";
@@ -261,13 +288,15 @@ function logoutAjax(event) {
             $("#dialog").css("display", "none");
             $("#logout").css("display", "none");
              $("#add_event_trigger").css("display", "none");
+            $("#displayoptions").css("display", "none");
+        logged_in = false;
     }
     else {
       alert("Could not log out. "+jsonData.message);
     }
   }, false);
   xmlHttp.send(null);
-  logged_in = false;
+//  logged_in = false;
   updateCalendar();
 }
 document.getElementById('logout').addEventListener('click', logoutAjax, false);
@@ -325,10 +354,6 @@ document.getElementById("prev_month_btn").addEventListener("click", function(eve
   document.getElementById('move').addEventListener("keyup", Move, false);
 //Change the current month
 function Move() {
-
-//if ($("#move").length == 7){
-
-
     if (/^\d{2}\/\d{4}$/.test($("#move").val()) && Number($("#move").val().substr(0, 2)) < 13 && Number($("#move").val().substr(0, 2)) > 0 && Number($("#move").val().substr(3, 4)) >= 1500 && Number($("#move").val().substr(3, 4)) <= 2500) {
         let count = Number($("#move").val().substr(3, 4)) - currentMonth.year;
         count = count* 12;
@@ -346,15 +371,18 @@ function Move() {
 }
 
 
-
-
-
-
-
+document.getElementById("id1").addEventListener("click", updateCalendar, false);
+document.getElementById("id2").addEventListener("click", updateCalendar, false);
+document.getElementById("id3").addEventListener("click", updateCalendar, false);
+document.getElementById("id4").addEventListener("click", updateCalendar, false);
+document.getElementById("id5").addEventListener("click", updateCalendar, false);
+document.getElementById("id6").addEventListener("click", updateCalendar, false);
+document.getElementById("id7").addEventListener("click", updateCalendar, false);
 
 </script>
 
 
     </body>
     </html>
+
 
