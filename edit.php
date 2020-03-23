@@ -16,7 +16,7 @@ $eventdate = substr($eventid, 5, 15);
 $eventitle = substr($eventid, 16);
 //echo($eventitle);
 
-$stmt = $mysqli->prepare("update events set title = ?, time = ?, description = ? WHERE title = ? AND date = ? AND user = ?");
+$stmt = $mysqli->prepare("update events set title = ?, time = ?, category = ? WHERE title = ? AND date = ? AND user = ?");
 
 if(!$stmt){
     printf("Query Prep Failed: %s\n", $mysqli->error);
