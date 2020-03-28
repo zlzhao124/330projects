@@ -8,6 +8,7 @@
   $date = $_POST['date'];
   $month = $_POST['month'];
   $year = $_POST['year'];
+  
   $category = $_POST['category'];
   $date2 = strval($year)."-".strval($month)."-".strval($date);
 

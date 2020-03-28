@@ -240,4 +240,31 @@ function editSetup(string, string2) {
 }       
 
 
+function shareEvent() {
+        const newuser = document.getElementById("newuser").value;
+        const Date = document.getElementById("date").value;
+         const title = document.getElementById("title").value;
+         const category=document.getElementById("category").value;
+         //const eventid = document.getElementById("original_id").value;
+
+        const dataString = { 'newuser': newuser, 'Date': Date, 'story title': title, 'category':category };
+        console.log(dataString);
+        fetch("share.php", {
+            method: 'POST',
+            body: JSON.stringify(dataString),
+            headers: { 'content-type': 'application/json' }
+        })
+            .then(response => response.json())
+            .then(function (data) {
+                data.success ? console.log("You've shared event!") : console.log("sharing event is unsuccessful " + data.message);
+                updateCalendar();
+            })
+            //.then(dataString => console.log(dataString.success ? "Event has been shared!" : `Event has not been shared ${dataString.message}`))
+            .catch(error => console.log("error" + error));
+    }
+    document.getElementById("share_btn").addEventListener("click", shareEvent, false); // Bind the AJAX call to button click
+
+    
+
+
 

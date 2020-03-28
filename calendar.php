@@ -106,6 +106,7 @@ input
                         <input type="submit" name="Add Event" value="Add Event" id="add_event_btn">
                         <input type="submit" value="Save Changes" id="save_changes_btn">
                         <input type="submit" value="Delete Event" id="delete_event_btn">
+                      
                         <input type="hidden" id="single_event_id">
                         <input type="hidden" id="csrf_token">
         </div>
@@ -171,6 +172,7 @@ function opendialog(event){
         $("#dialog").css("display", "inline");
         $("#save_changes_btn").css("display", "none");
         $("#delete_event_btn").css("display", "none");
+        $("#share_event_btn").css("display", "inline");
         $("#date").css("display", "inline");
         $("#add_event_btn").css("display", "inline");
 /*
