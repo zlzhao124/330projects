@@ -28,6 +28,10 @@
     color:red;
     display: none
 }
+#sharedialog{
+    color:red;
+    display: none
+}
 #logout{
     display: none
 }
@@ -111,6 +115,14 @@ input
                         <input type="hidden" id="csrf_token">
         </div>
 
+<div id = "sharedialog">
+        <h1> Share Event </h1>
+        <input type="hidden" id="csrf_token">
+        Share Event to this user:<input type="text" name="shared_user" id="shared_user">
+        <input type="submit" name="Share" value="Share!" id="share_event_btn">
+</div>
+
+
 <div id = "displayoptions">
         <br> <br> <br>
         Display Events by Category:
@@ -172,7 +184,7 @@ function opendialog(event){
         $("#dialog").css("display", "inline");
         $("#save_changes_btn").css("display", "none");
         $("#delete_event_btn").css("display", "none");
-        $("#share_event_btn").css("display", "inline");
+//        $("#share_event_btn").css("display", "inline");
         $("#date").css("display", "inline");
         $("#add_event_btn").css("display", "inline");
 /*

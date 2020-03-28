@@ -7,6 +7,8 @@ let months = ["January", "February", "March", "April", "May", "June", "July", "A
 let calendar = document.getElementById("calendar");
 let editcount = 0;
 let setupcount = 0;
+let sharecount = 0;
+let sh_setupcount = 0;
 function updateCalendar() {
         $('calendar').remove(); //was advised by previous 330 students to remove the calendar object and create a new one
         var weeks = currentMonth.getWeeks();
@@ -101,11 +103,13 @@ function getEvents(day) {
                                 //                      alert("reached" + day);
                                 var button_IDs = []; //array of delete buttons
                                 var ebutton_IDs = [];//array of edit buttons
+                                var sbutton_IDs = []; //array of share buttons
                                 if (jsonData.exists) {
                                         for (i = 0; i < jsonData.events.length; i++) {
 
                                                 button_IDs[i] = i;
                                                 ebutton_IDs[i] = i;
+                                                sbutton_IDs[i] = i;
                                                 var eventdiv = document.createElement("div");
                                                 eventdiv.appendChild(document.createTextNode(jsonData.events[i].title + " " + jsonData.events[i].time + " Category: " + jsonData.events[i].category));
                                                 eventdiv.setAttribute("class", "events");
@@ -126,10 +130,20 @@ function getEvents(day) {
                                                 ed.setAttribute("id", primarykeystring2);
                                                 eventdiv.appendChild(ed);
                                                 ebutton_IDs[i] = primarykeystring2;
+                                              //  document.getElementById(day).appendChild(eventdiv);
+
+                                                var sh = document.createElement("button");
+                                                sh.textContent = "Share Event";
+                                                sh.setAttribute("class", "sharebuttons");
+                                                var primarykeystring3 = "share-" + jsonData.events[i].date + " " + jsonData.events[i].title;
+                                                sh.setAttribute("id", primarykeystring3);
+                                                eventdiv.appendChild(sh);
+                                                sbutton_IDs[i] = primarykeystring3;
                                                 document.getElementById(day).appendChild(eventdiv);
+
+
                                         }
                                 }
-
                                 if (button_IDs.length > 0) {
 
                                         for (j = 0; j < button_IDs.length; j++) {
@@ -156,12 +170,27 @@ function getEvents(day) {
                                         }
 
                                 }
+
+                                if (sbutton_IDs.length > 0) {
+
+                                        for (l = 0; l < sbutton_IDs.length; l++) {
+                                                const sh_id = sbutton_IDs[l];
+                                                document.getElementById(sbutton_IDs[l]).addEventListener("click", function () {
+                                                       // editSetup(idi, day);
+                                                       $("#sharedialog").css("display", "inline");
+                                                       alert("hello!");
+                                                        shareSetup(sh_id, day);
+                                                }, false);
+
+                                        }
+
+                                }
+
                         }
                 }, false);
                 xmlHttp.send(dataString);
         }
 }
-
 function deleteEvent(string) {
         const dataString2 = "eventid=" + encodeURIComponent(string);
 
@@ -205,12 +234,13 @@ function editSetup(string, string2) {
                 const t = document.getElementById("title").value;
                 const time = document.getElementById("time").value;
                 const notes = document.getElementById("category").value;
+
                 editcount++;
-        //        alert(editcount);
-        //        alert(setupcount);
+        //      alert(editcount);
+         //       alert(setupcount);
                 const dataString = "title=" + encodeURIComponent(t) + "&time=" + encodeURIComponent(time) + "&notes=" + encodeURIComponent(notes) + "&original_id=" + encodeURIComponent(string);
-                
-                
+
+                //  document.getElementById("save_changes_btn").addEventListener("click", function(){
                 //alert(dataString);
                 console.log("c");
                 if (setupcount * 2 == editcount){ //to avoid adding too many event listeners and updating the same event over and over, subsequently displaying it over and over
@@ -239,15 +269,54 @@ function editSetup(string, string2) {
         
 }       
 
+function shareSetup(string, string2) {
 
-function shareEvent() {
-        const newuser = document.getElementById("newuser").value;
-        const Date = document.getElementById("date").value;
-         const title = document.getElementById("title").value;
-         const category=document.getElementById("category").value;
-         //const eventid = document.getElementById("original_id").value;
+        if (sharecount !== sh_setupcount){
+                sharecount = sh_setupcount;
+        }
+        console.log("b");
+        sharecount++;
+        sh_setupcount++;
 
-        const dataString = { 'newuser': newuser, 'Date': Date, 'story title': title, 'category':category };
+        var x = currentMonth.month;
+        var y = currentMonth.year;
+
+
+        document.getElementById("share_event_btn").addEventListener("click", function () {
+
+                const su = document.getElementById("shared_user").value;
+
+                sharecount++;
+
+                const dataString = "shared_user=" + encodeURIComponent(su) + "&original_id=" + encodeURIComponent(string);
+
+                //  document.getElementById("save_changes_btn").addEventListener("click", function(){
+                //alert(dataString);
+                console.log("c");
+                if (sh_setupcount * 2 == sharecount){ //to avoid adding too many event listeners and updating the same event over and over, subsequently displaying it over and over
+                        alert(dataString);
+              /*  var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open("POST", "edit.php", true);
+                xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
+                xmlHttp.addEventListener("load", function (event) {
+                        var jsonData = JSON.parse(event.target.responseText);
+                        if (jsonData.success) {
+                                alert("Event Updated!");
+                                updateCalendar();
+                        }
+                        else {
+                                alert("Could not update event. " + jsonData.message);
+                        }
+
+                }, false);
+                xmlHttp.send(dataString);
+                //updateCalendar();
+                $("#dialog").css("display", "none");
+                //$('#dialog').dialog('close');  */
+
+
+/*
+        const dataString = { 'newuser': su, 'original_id' : string };
         console.log(dataString);
         fetch("share.php", {
             method: 'POST',
@@ -261,10 +330,15 @@ function shareEvent() {
             })
             //.then(dataString => console.log(dataString.success ? "Event has been shared!" : `Event has not been shared ${dataString.message}`))
             .catch(error => console.log("error" + error));
-    }
-    document.getElementById("share_btn").addEventListener("click", shareEvent, false); // Bind the AJAX call to button click
-
-    
+    */
 
 
+
+
+                }
+
+
+        }, false);
+
+}
 

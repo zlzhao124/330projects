@@ -7,10 +7,16 @@ session_start();
 $username = $_SESSION['username'];
 
 $newuser = $json_obj["newuser"];
-$title = $_POST['title'];
-$category=$_POST['category'];
-$date = $_POST['date'];
+//$title = $_POST['title'];
+//$category=$_POST['category'];
+//$date = $_POST['date'];
 $eventid = $_POST['original_id'];
+
+$eventdate = substr($eventid, 6, 16);
+//echo($eventdate);
+$eventitle = substr($eventid, 17);
+//echo($eventitle);
+
 
 $stmt = $mysqli->prepare("select title, date ,category from events where user=? );
 
