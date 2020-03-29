@@ -21,6 +21,10 @@ $edate = date('Y-m-d', strtotime($eventdate));
 
 //Variables can be accessed as such and is equivalent to what I previously did with $_POST['username'] and $_POST['password']
 
+if(!hash_equals($_SESSION['token'], $_POST['token'])){
+        die("Request forgery detected");
+}
+
 $stmt2 = $mysqli->prepare("DELETE FROM events WHERE title = ? AND date = ? AND user = ?");
 if(!$stmt2){
     printf("Query Prep Failed: %s\n", $mysqli->error);
@@ -42,3 +46,4 @@ $stmt2->close();
 exit;
 
 ?>
+

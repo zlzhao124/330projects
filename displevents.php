@@ -1,4 +1,5 @@
 <?php
+
   require 'database.php';
   header("Content-Type: application/json");
   // session cookie http only
@@ -8,11 +9,14 @@
   $date = $_POST['date'];
   $month = $_POST['month'];
   $year = $_POST['year'];
-  
   $category = $_POST['category'];
+
+
+
   $date2 = strval($year)."-".strval($month)."-".strval($date);
 
   $cdate = date('Y-m-d', strtotime($date2));
+
 
 if ($category == "All"){
   $stmt = $mysqli->prepare("select * from events where user =? and date=?");
@@ -39,9 +43,7 @@ else{
   $stmt->bind_param('sss', $username, $cdate, $category);
 
 
-}  
-
-
+}
   $stmt->execute();
   $result = $stmt->get_result();
   if ($result->num_rows > 0) {
@@ -49,11 +51,11 @@ else{
   // Make an array of all the resulting events that will be included in the jsonData that is passed back
   while($row = $result->fetch_assoc()){
      array_push($events, array(
-       "title" => $row['title'],
-       "time" => $row['time'],
-       "user" => $row['user'],
-       "category" => $row['category'],
-       "date" => $row['date']
+       "title" => htmlentities($row['title']),
+       "time" => htmlentities($row['time']),
+       "user" => htmlentities($row['user']),
+       "category" => htmlentities($row['category']),
+       "date" => htmlentities($row['date'])
      ));
   }
   echo json_encode(array(
@@ -63,7 +65,6 @@ else{
   ));
   exit;
   }
-  
   else {
     echo json_encode(array(
       "success" => true,
@@ -73,3 +74,4 @@ else{
   $stmt->close();
 
 ?>
+                                             

@@ -4,6 +4,7 @@
 
 require 'database.php';
 header("Content-Type: application/json");
+ini_set("session.cookie_httponly", 1);
 
 $username = (String)$_POST['username'];
 $password = (String)$_POST['pass'];

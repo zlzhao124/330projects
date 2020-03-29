@@ -2,6 +2,7 @@
 require 'database.php';
 
 header("Content-Type: application/json");
+ini_set("session.cookie_httponly", 1);
 
 session_start();
 $username = $_SESSION['username'];
@@ -15,6 +16,12 @@ $eventdate = substr($eventid, 5, 15);
 //echo($eventdate);
 $eventitle = substr($eventid, 16);
 //echo($eventitle);
+
+
+
+if(!hash_equals($_SESSION['token'], $_POST['token'])){
+        die("Request forgery detected");
+}
 
 $stmt = $mysqli->prepare("update events set title = ?, time = ?, category = ? WHERE title = ? AND date = ? AND user = ?");
 

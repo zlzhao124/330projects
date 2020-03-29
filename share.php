@@ -5,74 +5,106 @@ header("Content-Type: application/json");
 ini_set("session.cookie_httponly", 1);
 session_start();
 $username = $_SESSION['username'];
-
-$newuser = $json_obj["newuser"];
-//$title = $_POST['title'];
-//$category=$_POST['category'];
-//$date = $_POST['date'];
+$newuser = $_POST['shared_user'];
 $eventid = $_POST['original_id'];
 
-$eventdate = substr($eventid, 6, 16);
+$eventdate = substr($eventid, 6, 10);
 //echo($eventdate);
 $eventitle = substr($eventid, 17);
 //echo($eventitle);
 
-
-$stmt = $mysqli->prepare("select title, date ,category from events where user=? );
-
-if(!$stmt){
-    echo json_encode(array(
+if ($username == $newuser){
+echo json_encode(array(
         "success" => false,
-        "message" => htmlentities($year)
+        "message" => "you can't share this event with yourself!"
+      ));
+      exit;
+}
+else{
+$stmt = $mysqli->prepare("select * from users where username =?"); //check to see if shared user exists
+  if(!$stmt){
+      echo json_encode(array(
+        "success" => false,
+        "message" => $mysqli->error,
+      ));
+      exit;
+  }
+  $stmt->bind_param('s', $newuser);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  if ($result->num_rows > 0) { // indicates that user exists
+
+$stmt2 = $mysqli->prepare("select time, category from events where title = ? AND date = ? AND user = ?");
+if(!$stmt2){
+      echo json_encode(array(
+        "success" => false,
+        "message" => $mysqli->error,
+      ));
+      exit;
+  }
+
+$stmt2->bind_param('sss', $eventitle, $eventdate, $username);
+
+if (!$stmt2->execute()){
+    echo json_encode(array(
+      "success" => false,
+      "message" => "Unable to add event! "
     ));
     exit;
 }
+  $result2 = $stmt2->get_result();
+  if ($result2->num_rows == 1) {
+    $events = array();
+  // Make an array of all the resulting events that will be included in the jsonData that is passed back
+  while($row = $result2->fetch_assoc()){
+     array_push($events, array(
 
-$stmt->bind_param('sss', $username, $date, $category);
+       "time" => htmlentities($row['time']),
 
-$stmt->execute();
+       "category" => htmlentities($row['category']),
 
-$stmt->bind_result($newuser,$eventitle, $eventdate, $eventid, $date,$username);
+     ));
 
-$stmt->fetch();
+$eventitle2 = $eventitle." *";
 
-if($mysqli->error!=null){
-	echo json_encode(array(
-		"success" => false,
-		"message" => " Nosuch events!"
-	));
-	exit;
+$stmt3 = $mysqli->prepare("insert into events (title, date, time, user, category) values (?,?,?,?,?)");
+if(!$stmt3){
+        echo json_encode(array(
+                "success" => false,
+                "message" => "illegal!"
+        ));
+        exit;
 }
-$stmt->close();
-$stmt = $mysqli->prepare("insert into events (title,username,date,category) values (?,?,?,?)");
+$stmt3->bind_param('sssss', $eventitle2,$eventdate,$row['time'],$newuser,$row['category']) ;
 
-
-if(!$stmt){
-	echo json_encode(array(
-		"success" => false,
-		"message" => "illegal!"
-	));
-	exit;
+if (!$stmt3->execute()){
+    echo json_encode(array(
+      "success" => false,
+      "message" => "Unable to add event! ".$eventiid
+    ));
+}
+else{
+   echo json_encode(array("success" => true));
+}
+    $stmt3->close();
 }
 
-$stmt->bind_param('ssss', $title,$username,$date,$category) ;
-
-$stmt->execute();
-
-if($mysqli->error!=null){
-	echo json_encode(array(
-        "success" => false,
-        "message" => "The username '".htmlentities($username)."' is not found!"
-	));
-	exit;
 }
-$stmt->close();
 
-echo json_encode(array(
-    "success" => true,
-    "message" => "Event Shared!"
-));
+else{
+echo json_encode(array("success" => false, "message" => $eventitle));
+}
 
+$stmt2->close();
+
+}
+  else {
+    echo json_encode(array(
+      "success" => false,
+      "message" => "user not found"
+    ));
+  }
+  $stmt->close();
 exit;
-
+}
 ?>

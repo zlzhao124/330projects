@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang='en'>
+    <head>
     <meta charset="utf-8" />
     <title>
         Calendar
@@ -7,7 +8,6 @@
     <h1>
         Helen & Zach's Calendar
     </h1>
-    <head>
     
 
         <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/start/jquery-ui.css" type="text/css" rel="Stylesheet">
@@ -32,6 +32,7 @@
     color:red;
     display: none
 }
+
 #logout{
     display: none
 }
@@ -50,7 +51,6 @@ body{
 .calendar{
     text-align: center;
 }
-
 table{
     margin: auto;
 }
@@ -81,6 +81,9 @@ input
 
 </style>
     <body>
+<?php
+session_start();
+?>
 
 <p id="welcomeMessage" class="welcomeMessage"></p>
 
@@ -107,13 +110,14 @@ input
                                 <option value = "Holiday">Holiday</option>
                                 <option value = "Other">Other</option>
                         </select>
+
                         <input type="submit" name="Add Event" value="Add Event" id="add_event_btn">
                         <input type="submit" value="Save Changes" id="save_changes_btn">
                         <input type="submit" value="Delete Event" id="delete_event_btn">
-                      
-                        <input type="hidden" id="single_event_id">
-                        <input type="hidden" id="csrf_token">
+                        <input type="hidden" id = "csrf_token" name="token" value="<?php echo $_SESSION['token'];?>" />
+
         </div>
+
 
 <div id = "sharedialog">
         <h1> Share Event </h1>
@@ -121,7 +125,6 @@ input
         Share Event to this user:<input type="text" name="shared_user" id="shared_user">
         <input type="submit" name="Share" value="Share!" id="share_event_btn">
 </div>
-
 
 <div id = "displayoptions">
         <br> <br> <br>
@@ -184,7 +187,6 @@ function opendialog(event){
         $("#dialog").css("display", "inline");
         $("#save_changes_btn").css("display", "none");
         $("#delete_event_btn").css("display", "none");
-//        $("#share_event_btn").css("display", "inline");
         $("#date").css("display", "inline");
         $("#add_event_btn").css("display", "inline");
 /*
@@ -201,10 +203,10 @@ function addevent(event){
  // $("#save_changes_btn").css("display", "none");
   const t = document.getElementById("title").value;
   const d = document.getElementById("date").value;        
-  
+  const tok = document.getElementById("csrf_token").value;  
   const time = document.getElementById("time").value;
   const notes = document.getElementById("category").value;
-  const dataString = "title=" + encodeURIComponent(t) + "&date=" + encodeURIComponent(d)  + "&time=" + encodeURIComponent(time)  + "&notes=" + encodeURIComponent(notes);
+  const dataString = "title=" + encodeURIComponent(t) + "&date=" + encodeURIComponent(d)  + "&time=" + encodeURIComponent(time)  + "&notes=" + encodeURIComponent(notes) + "&token=" + encodeURIComponent(tok);
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.open("POST", "addevent.php", true);
   xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
@@ -310,7 +312,6 @@ function logoutAjax(event) {
     }
   }, false);
   xmlHttp.send(null);
-//  logged_in = false;
   updateCalendar();
 }
 document.getElementById('logout').addEventListener('click', logoutAjax, false);
@@ -340,13 +341,6 @@ function checkforlogin(event) {
 }
 document.addEventListener("DOMContentLoaded", checkforlogin, false);
 
-
-$(".deletebuttons").click(function(){
-     alert("poggers");
- });
-
-
-
 // For our purposes, we can keep the current month in a variable in the global scope
 var currentMonth = new Month(2020, 2); // March 2020
 updateCalendar();//loads the calendar immediately 
@@ -368,6 +362,7 @@ document.getElementById("prev_month_btn").addEventListener("click", function(eve
   document.getElementById('move').addEventListener("keyup", Move, false);
 //Change the current month
 function Move() {
+
     if (/^\d{2}\/\d{4}$/.test($("#move").val()) && Number($("#move").val().substr(0, 2)) < 13 && Number($("#move").val().substr(0, 2)) > 0 && Number($("#move").val().substr(3, 4)) >= 1500 && Number($("#move").val().substr(3, 4)) <= 2500) {
         let count = Number($("#move").val().substr(3, 4)) - currentMonth.year;
         count = count* 12;
@@ -398,5 +393,4 @@ document.getElementById("id7").addEventListener("click", updateCalendar, false);
 
     </body>
     </html>
-
 
