@@ -11,7 +11,7 @@ Note: we used xmlHTTP requests instead of the newer fetch() calls because one of
 
 Creative Portion
 
-•We added a quick-move function: if a string in the form 'MM/YYYY' is typed into a textbox and the return key is hit after that is typed, the calendar will move automatically to that month and that year. According to Connor, this is worth 5 points and we have the piazza post to prove he said that.
+•We added a quick-move function: if a string in the form 'MM/YYYY' is typed into a textbox and the return key is hit after that is typed, the calendar will move automatically to that month and that year. According to head TA Connor Stevens, this is worth 5 points and we have the piazza post to prove he said that.
 
 •Users can tag an event with a particular category and enable/disable those tags in the calendar view. (5 points) 
 
