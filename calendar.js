@@ -51,8 +51,6 @@ function updateCalendar(){
 
 
 
-
-
 // For our purposes, we can keep the current month in a variable in the global scope
 var currentMonth = new Month(2020, 2); // March 2020
 updateCalendar();//loads the calendar immediately 

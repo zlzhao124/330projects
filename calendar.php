@@ -136,7 +136,7 @@ input
     <div id="register">
         <b>Register New User:</b>
         <input id="r_username" type="text" name="r_username" placeholder="Username">
-        <input id="r_password" type="text" name="r_password" placeholder="Password">
+        <input id="r_password" type="password" name="r_password" placeholder="Password">
         <button id="register_btn">Register</button>
     </div>
 
@@ -144,8 +144,8 @@ input
 
     <div id="login">
         <b>Login:</b>
-        <input type="text" id="username" placeholder="Username" />
-        <input type="text" id="password" placeholder="Password" />
+        <input  type="text" id="username" placeholder="Username" />
+        <input type="password"  id="password" placeholder="Password" />
         <button id="login_btn">Log In</button>
     </div>
 
