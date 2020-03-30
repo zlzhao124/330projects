@@ -323,6 +323,17 @@ document.getElementById("next_month_btn").addEventListener("click", function(eve
         currentMonth = currentMonth.nextMonth(); // Previous month would be currentMonth.prevMonth()
         updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
 }, false);
+
+
+document.getElementById("prev_month_btn").addEventListener("click", function(event){
+        currentMonth = currentMonth.prevMonth(); // Previous month would be currentMonth.prevMonth()
+        updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+
+}, false);
+
+
+
+
   document.getElementById('move').addEventListener("keyup", Move, false);
 //Change the current month to any month we want
 function Move() {
