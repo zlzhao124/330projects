@@ -4,7 +4,6 @@
 
 require 'database.php';
 header("Content-Type: application/json");
-ini_set("session.cookie_httponly", 1);
 
 $username = (String)$_POST['username'];
 $password = (String)$_POST['pass'];
@@ -26,7 +25,8 @@ if(password_verify($password, $hashedPass) ){
         $_SESSION['username'] = $username;
         $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
         echo json_encode(array(
-                "success" => true
+                "success" => true,
+		"token" => $_SESSION['token']
         ));
         exit;
 }

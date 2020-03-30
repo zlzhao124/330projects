@@ -1,4 +1,4 @@
-//variables
+//variables that we will use in our code
 let today = new Date();
 let startmonth = today.getMonth();
 let startyear = today.getFullYear();
@@ -29,13 +29,13 @@ function updateCalendar() {
 
         document.getElementById("displaymonth").innerHTML = months[currentMonth.month] + ", " + currentMonth.year;
         for (var w in weeks) {
-                //              alert("hello");
                 var days = weeks[w].getDates();
                 // days contains normal JavaScript Date objects.                                                
                 let thisWeek = document.createElement('tr');
                 for (var d in days) {
                         var today = document.createElement('td');
                         if (days[d].getMonth() != currentMonth.month) {
+				//puts blank space for ends of the month with days not in the actual month
                                 today.appendChild(document.createTextNode(" "));
                         }
                         else {
@@ -50,9 +50,9 @@ function updateCalendar() {
         }
         cal.appendChild(table_body);
         body.appendChild(cal);
-//      document.getElementById("save_changes_btn").removeEventListener("click");
-}
 
+}
+//this will display the events our user has made onto our calendar. it is called by updatecalendar above
 function getEvents(day) {
         if (logged_in === true) {
 
@@ -63,11 +63,11 @@ function getEvents(day) {
                 var v5 =  document.getElementById('id5');
                 var v6 =  document.getElementById('id6');
                 var v7 =  document.getElementById('id7');
-                var category = document.getElementById('id7');
-
-                if (v1.checked == true){
-                        category = document.getElementById('id1');
-                }
+		var category = document.getElementById('id7');
+		
+		if (v1.checked == true){
+			category = document.getElementById('id1');
+		}
                 if (v2.checked == true){
                         category = document.getElementById('id2');
                 }
@@ -86,35 +86,33 @@ function getEvents(day) {
                 if (v7.checked == true){
                         category = document.getElementById('id7');
                 }
-                var category_value = category.value;
-//              alert(category_value);
+		var category_value = category.value;
                 cmonth = currentMonth.month + 1;
                 cyear = currentMonth.year;
                 var dataString = "date=" + encodeURIComponent(day) + "&month=" + encodeURIComponent(cmonth) + "&year=" + encodeURIComponent(cyear) + "&category=" + encodeURIComponent(category_value);
                 var xmlHttp = new XMLHttpRequest();
                 xmlHttp.open("POST", "displevents.php", true);
-                xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
+                xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); 
                 xmlHttp.addEventListener("load", function (event) {
                         var jsonData = JSON.parse(event.target.responseText);
                         if (!jsonData.success) {
                                 alert("failed to fetch events");
                         }
                         else {
-                                //                      alert("reached" + day);
                                 var button_IDs = []; //array of delete buttons
                                 var ebutton_IDs = [];//array of edit buttons
-                                var sbutton_IDs = []; //array of share buttons
+				var sbutton_IDs = []; //array of share buttons
                                 if (jsonData.exists) {
                                         for (i = 0; i < jsonData.events.length; i++) {
-
+						//creates the event text node with title, time and category
                                                 button_IDs[i] = i;
                                                 ebutton_IDs[i] = i;
-                                                sbutton_IDs[i] = i;
+						sbutton_IDs[i] = i;
                                                 var eventdiv = document.createElement("div");
                                                 eventdiv.appendChild(document.createTextNode(jsonData.events[i].title + " " + jsonData.events[i].time + " Category: " + jsonData.events[i].category));
                                                 eventdiv.setAttribute("class", "events");
                                                 eventdiv.setAttribute("id", jsonData.events[i].title + " " + jsonData.events[i].date);
-
+						//creates a delete button right below the event text with ID containing the event information
                                                 var del = document.createElement("button");
                                                 del.textContent = "Delete Event";
                                                 del.setAttribute("class", "deletebuttons");
@@ -122,7 +120,7 @@ function getEvents(day) {
                                                 del.setAttribute("id", primarykeystring);
                                                 eventdiv.appendChild(del);
                                                 button_IDs[i] = primarykeystring;
-
+						//creates an edit button right below the event text with ID containing the event information
                                                 var ed = document.createElement("button");
                                                 ed.textContent = "Edit Event";
                                                 ed.setAttribute("class", "editbuttons");
@@ -130,7 +128,7 @@ function getEvents(day) {
                                                 ed.setAttribute("id", primarykeystring2);
                                                 eventdiv.appendChild(ed);
                                                 ebutton_IDs[i] = primarykeystring2;
-                                              //  document.getElementById(day).appendChild(eventdiv);
+                                              // creates a share button right below the event text with ID containing the event information
 
                                                 var sh = document.createElement("button");
                                                 sh.textContent = "Share Event";
@@ -144,15 +142,12 @@ function getEvents(day) {
 
                                         }
                                 }
+
                                 if (button_IDs.length > 0) {
 
                                         for (j = 0; j < button_IDs.length; j++) {
-
-                                                //      alert(day + " " + button_IDs.length);
                                                 const idid = button_IDs[j];
-                                                //      alert(button_IDs[j]);
                                                 document.getElementById(button_IDs[j]).addEventListener("click", function () {
-                                                        //alert(idid);
                                                         deleteEvent(idid);
                                                 }, false);
                                         }
@@ -161,7 +156,6 @@ function getEvents(day) {
                                 if (ebutton_IDs.length > 0) {
                                         console.log("a");
                                         for (k = 0; k < ebutton_IDs.length; k++) {
-                                                //      alert(day + " " + button_IDs.length);
                                                 const idi = ebutton_IDs[k];
                                                 document.getElementById(ebutton_IDs[k]).addEventListener("click", function () {
                                                         editSetup(idi, day);
@@ -172,14 +166,12 @@ function getEvents(day) {
                                 }
 
                                 if (sbutton_IDs.length > 0) {
-
+                                     
                                         for (l = 0; l < sbutton_IDs.length; l++) {
                                                 const sh_id = sbutton_IDs[l];
                                                 document.getElementById(sbutton_IDs[l]).addEventListener("click", function () {
-                                                       // editSetup(idi, day);
                                                        $("#sharedialog").css("display", "inline");
-                                                       alert("hello!");
-                                                        shareSetup(sh_id, day);
+							shareSetup(sh_id, day);
                                                 }, false);
 
                                         }
@@ -191,16 +183,16 @@ function getEvents(day) {
                 xmlHttp.send(dataString);
         }
 }
+
 function deleteEvent(string) {
-        const dataString2 = "eventid=" + encodeURIComponent(string);
+	const tok = document.getElementById("csrf_token").value;
+        const dataString2 = "eventid=" + encodeURIComponent(string) + "&token=" + encodeURIComponent(tok);
 
         var xmlHttp2 = new XMLHttpRequest();
         xmlHttp2.open("POST", "delete.php", true);
         xmlHttp2.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
         xmlHttp2.addEventListener("load", function (event) {
-                //  alert("reached2");
                 var jsonData2 = JSON.parse(event.target.responseText);
-                //      alert("reached3");
                 if (jsonData2.success) {
                         alert("Event Deleted!");
                         updateCalendar();
@@ -212,63 +204,56 @@ function deleteEvent(string) {
         xmlHttp2.send(dataString2);
 
 }
-
+//opens up the add/edit dialog to prepare for edit
 function editSetup(string, string2) {
-        if (setupcount !== editcount){
-                editcount = setupcount;
-        }
+	if (setupcount !== editcount){
+		editcount = setupcount;
+	}
         console.log("b");
-        setupcount++;
-        editcount++;
+	setupcount++;
+	editcount++;
         opendialog();
         $("#add_event_btn").css("display", "none");
         $("#save_changes_btn").css("display", "inline");
         $("#date").css("display", "none");
         var x = currentMonth.month;
         var y = currentMonth.year;
-
- //       document.getElementById("save_changes_btn").removeEventListener("click");
-       //document.getElementById("save_changes_btn").setEventListener("click")
+	//below is the code that will call the ajax request and edit our event
         document.getElementById("save_changes_btn").addEventListener("click", function () {
-                // $("#save_changes_btn").css("display", "none");
                 const t = document.getElementById("title").value;
                 const time = document.getElementById("time").value;
                 const notes = document.getElementById("category").value;
-
-                editcount++;
-        //      alert(editcount);
-         //       alert(setupcount);
-                const dataString = "title=" + encodeURIComponent(t) + "&time=" + encodeURIComponent(time) + "&notes=" + encodeURIComponent(notes) + "&original_id=" + encodeURIComponent(string);
-
-                //  document.getElementById("save_changes_btn").addEventListener("click", function(){
-                //alert(dataString);
+	        const tok = document.getElementById("csrf_token").value;	
+		editcount++;
+		const dataString = "title=" + encodeURIComponent(t) + "&time=" + encodeURIComponent(time) + "&notes=" + encodeURIComponent(notes) + "&original_id=" + encodeURIComponent(string) + "&token=" + encodeURIComponent(tok);
                 console.log("c");
-                if (setupcount * 2 == editcount){ //to avoid adding too many event listeners and updating the same event over and over, subsequently displaying it over and over
+		if (setupcount * 2 == editcount){ //to avoid adding too many event listeners and updating the same event over and over, subsequently displaying it over and over
                 var xmlHttp = new XMLHttpRequest();
                 xmlHttp.open("POST", "edit.php", true);
-                xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
+                xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); 
                 xmlHttp.addEventListener("load", function (event) {
                         var jsonData = JSON.parse(event.target.responseText);
                         if (jsonData.success) {
                                 alert("Event Updated!");
                                 updateCalendar();
-                        }       
-                        else {  
+                        }
+                        else {
                                 alert("Could not update event. " + jsonData.message);
-                        }       
-                        
+                        }
+
                 }, false);
                 xmlHttp.send(dataString);
-                //updateCalendar();
                 $("#dialog").css("display", "none");
-                //$('#dialog').dialog('close');
-                }
-                
+               
+		}
+		
                 
         }, false);
-        
-}       
 
+}
+
+
+//opens up the share event dialog and prepares to share the event with another user, was implemented similar to editsetup above
 function shareSetup(string, string2) {
 
         if (sharecount !== sh_setupcount){
@@ -287,58 +272,29 @@ function shareSetup(string, string2) {
                 const su = document.getElementById("shared_user").value;
 
                 sharecount++;
+                const tok = document.getElementById("csrf_token").value;
+                const dataString = "shared_user=" + encodeURIComponent(su) + "&original_id=" + encodeURIComponent(string) +  "&token=" + encodeURIComponent(tok);
 
-                const dataString = "shared_user=" + encodeURIComponent(su) + "&original_id=" + encodeURIComponent(string);
-
-                //  document.getElementById("save_changes_btn").addEventListener("click", function(){
-                //alert(dataString);
                 console.log("c");
                 if (sh_setupcount * 2 == sharecount){ //to avoid adding too many event listeners and updating the same event over and over, subsequently displaying it over and over
-                        alert(dataString);
-              /*  var xmlHttp = new XMLHttpRequest();
-                xmlHttp.open("POST", "edit.php", true);
-                xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open("POST", "share.php", true);
+                xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                 xmlHttp.addEventListener("load", function (event) {
                         var jsonData = JSON.parse(event.target.responseText);
                         if (jsonData.success) {
-                                alert("Event Updated!");
-                                updateCalendar();
+                                alert("Event Shared!");
                         }
                         else {
-                                alert("Could not update event. " + jsonData.message);
+                                alert("Could not share event. " + jsonData.message);
                         }
 
                 }, false);
                 xmlHttp.send(dataString);
-                //updateCalendar();
-                $("#dialog").css("display", "none");
-                //$('#dialog').dialog('close');  */
-
-
-/*
-        const dataString = { 'newuser': su, 'original_id' : string };
-        console.log(dataString);
-        fetch("share.php", {
-            method: 'POST',
-            body: JSON.stringify(dataString),
-            headers: { 'content-type': 'application/json' }
-        })
-            .then(response => response.json())
-            .then(function (data) {
-                data.success ? console.log("You've shared event!") : console.log("sharing event is unsuccessful " + data.message);
-                updateCalendar();
-            })
-            //.then(dataString => console.log(dataString.success ? "Event has been shared!" : `Event has not been shared ${dataString.message}`))
-            .catch(error => console.log("error" + error));
-    */
-
-
-
-
+                $("#sharedialog").css("display", "none");
                 }
 
 
         }, false);
 
 }
-

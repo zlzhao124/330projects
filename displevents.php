@@ -17,7 +17,7 @@
 
   $cdate = date('Y-m-d', strtotime($date2));
 
-
+//if the all category was selected, then it will disregard category and display all events, otherwise it will only display events in 1 category
 if ($category == "All"){
   $stmt = $mysqli->prepare("select * from events where user =? and date=?");
   if(!$stmt){
@@ -74,4 +74,4 @@ else{
   $stmt->close();
 
 ?>
-                                             
+

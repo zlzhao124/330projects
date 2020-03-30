@@ -5,11 +5,8 @@ header("Content-Type: application/json");
 
 ini_set("session.cookie_httponly", 1);
 
-
 session_start();
 $username = $_SESSION['username'];
-
-//const dataString = "title=" + encodeURIComponent(t) + "&date=" + encodeURIComponent(d)  + "&notes=" + encodeURIComponent(notes);
 
 $title = $_POST['title'];
 $date = $_POST['date'];
@@ -27,8 +24,7 @@ if(!$stmt){
     printf("Query Prep Failed: %s\n", $mysqli->error);
     exit;
 }
-  // Check the username that was entered to make sure that it is not a duplicate, and that both the username and password are nonempty string
-
+  // Check that a title exists for the event. If date and time are blank, then the date will be '0000-00-00 00:00:00'
 if (strlen($title)>0){
     $stmt->bind_param('sssss', $title, $date, $time, $username, $notes);
 
@@ -56,3 +52,4 @@ $stmt->close();
     exit;
 }
 ?>
+

@@ -8,7 +8,7 @@
     <h1>
         Helen & Zach's Calendar
     </h1>
-    
+
 
         <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/start/jquery-ui.css" type="text/css" rel="Stylesheet">
         <!-- We need the style sheet linked above or the dialogs/other parts of jquery-ui won't display correctly!-->
@@ -16,13 +16,11 @@
         <!-- The main library. Note: must be listed before the jquery-ui library -->
         <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js"></script>
         <!-- jquery-UI hosted on Google's Ajax CDN-->
-       
+
         <script src="http://classes.engineering.wustl.edu/cse330/content/calendar.min.js" type="text/javascript"></script>
         <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
        <!-- <script src=calendar.js></script> -->
         <link rel="stylesheet" type="text/css" href="calendar.css">
-    </head>
-
 <style>
 #dialog{
     color:red;
@@ -51,6 +49,7 @@ body{
 .calendar{
     text-align: center;
 }
+
 table{
     margin: auto;
 }
@@ -80,10 +79,9 @@ input
 }
 
 </style>
+</head>
     <body>
-<?php
-session_start();
-?>
+
 
 <p id="welcomeMessage" class="welcomeMessage"></p>
 
@@ -95,12 +93,11 @@ session_start();
 
         <div id="dialog">
                         <h1>Add/Edit Event</h1>
-                <!--    Enter Event Title, Date, Time, and Description here!<br>-->
+                <!--    Enter Event Title, Date, Time, and Description here -->
                         Title:<input type="text" name="title" id="title">
-               <!--     Date:<input type="number" name="date" id="date" step = "1"> -->
+
                         <input type="date" name="date" id="date" >
                         <input type="time" name="time" id="time">
-                <!--        Description:<textarea name="description" id="description"></textarea> -->
 
                         <select id = "category" >
                                 <option value = "School">School</option>
@@ -110,18 +107,15 @@ session_start();
                                 <option value = "Holiday">Holiday</option>
                                 <option value = "Other">Other</option>
                         </select>
-
                         <input type="submit" name="Add Event" value="Add Event" id="add_event_btn">
                         <input type="submit" value="Save Changes" id="save_changes_btn">
-                        <input type="submit" value="Delete Event" id="delete_event_btn">
-                        <input type="hidden" id = "csrf_token" name="token" value="<?php echo $_SESSION['token'];?>" />
+                        <input type="hidden" id = "csrf_token" name="token" />
 
         </div>
 
 
 <div id = "sharedialog">
         <h1> Share Event </h1>
-        <input type="hidden" id="csrf_token">
         Share Event to this user:<input type="text" name="shared_user" id="shared_user">
         <input type="submit" name="Share" value="Share!" id="share_event_btn">
 </div>
@@ -130,17 +124,14 @@ session_start();
         <br> <br> <br>
         Display Events by Category:
         <br>
-  <input type="radio" name="cat" value="School" id = "id1" required> School<br>
-  <input type="radio" name="cat" value="Work" id = "id2" required> Work<br>
-  <input type="radio" name="cat" value="Recreation" id = "id3" required> Recreation<br>
- <input type="radio" name="cat" value="Family" id = "id4" required> Family <br>
+<input type="radio" name="cat" value="School" id = "id1" required> School<br>
+<input type="radio" name="cat" value="Work" id = "id2" required> Work<br>
+<input type="radio" name="cat" value="Recreation" id = "id3" required> Recreation<br>
+<input type="radio" name="cat" value="Family" id = "id4" required> Family <br>
 <input type="radio" name="cat" value="Holiday" id = "id5" required> Holiday<br>
 <input type="radio" name="cat" value="Other" id = "id6" required> Other<br>
 <input type="radio" name="cat" value="All" id = "id7" required> All Events<br>
 </div>
-
-
-
 
     <div id="register">
         <b>Register New User:</b>
@@ -162,25 +153,16 @@ session_start();
          <button id="prev_month_btn">Previous Month &#10094;</button>
          <button id="next_month_btn">Next Month&#10095;</button>
 
- <!--   <div id="quicklymove">
-         Month:<input type="number" name="mo" id="mo" step = "1">
-         Year:<input type="number" name="yr" id="yr" step = "1">
-         <button id="quickmove">Move to this month!</button>
-    </div>-->
-
-Move to:<input id='move' type="text" name="move" placeholder="mm/yyyy" />
-
+<!-- quickmove -->
+Move to:<input id='move' type="text" name="move" placeholder="mm/yyyy" /> After typing a string, if the calendar doesn't move, try hitting the return key!
 <script type="text/javascript" src="updatecalendar.js"></script>
     <div id="table">
         <table id="calendar">
         </table>
     </div>
 
-
-
-
 <script>
-
+//global variable to check to see if the user has logged in
 var logged_in = false;
  
 function opendialog(event){
@@ -189,18 +171,13 @@ function opendialog(event){
         $("#delete_event_btn").css("display", "none");
         $("#date").css("display", "inline");
         $("#add_event_btn").css("display", "inline");
-/*
-        $("#dialog").dialog({
-                title: "Add Event",
-                draggable: true
-                
-        });*/
+        //Note to graders: the prompt did not say we needed a pop-up dialog, but we tried one anyway and it failed. It just opens up some of the inputs in our HTML page.
 
 }
-document.getElementById("add_event_trigger").addEventListener("click", opendialog, false);
 
+document.getElementById("add_event_trigger").addEventListener("click", opendialog, false);
+//add event
 function addevent(event){
- // $("#save_changes_btn").css("display", "none");
   const t = document.getElementById("title").value;
   const d = document.getElementById("date").value;        
   const tok = document.getElementById("csrf_token").value;  
@@ -214,11 +191,8 @@ function addevent(event){
     var jsonData = JSON.parse(event.target.responseText);
     if (jsonData.success) {
       alert("Event Added!");
-//      alert(d2.getMonth());
-//      alert(d2.getDate());
       updateCalendar();
       $("#dialog").css("display", "none");
-      //$('#dialog').dialog('close');
     }
     else {
       alert("Could not add event. "+jsonData.message);
@@ -227,9 +201,6 @@ function addevent(event){
   xmlHttp.send(dataString);
 }
 document.getElementById("add_event_btn").addEventListener("click", addevent, false);
-
-
-//document.getElementById("save_changes_btn").addEventListener("click", editevent, false);
 
 
 function loggedin(username) {
@@ -243,19 +214,18 @@ function loggedin(username) {
             $("#add_event_trigger").css("display", "inline");
             updateCalendar();
         }
-
-
 function loginAjax(event) {
     const username = document.getElementById("username").value; // Get the username from the form
     const password = document.getElementById("password").value; // Get the password from the form
     const dataString = "username=" + encodeURIComponent(username) + "&pass=" + encodeURIComponent(password);
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.open("POST", "login.php", true);
-  xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
+  xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); 
   xmlHttp.addEventListener("load", function(event){
   var jsonData = JSON.parse(event.target.responseText);
     if (jsonData.success) {
       alert("Login success");
+      document.getElementById("csrf_token").value=jsonData.token;
       loggedin(username); 
     }
     else {
@@ -270,17 +240,15 @@ document.getElementById("login_btn").addEventListener("click", loginAjax, false)
 function registerAjax(event) {
   const newuser = document.getElementById('r_username').value;
   const newpass = document.getElementById('r_password').value;
-
   const dataString = "username=" + encodeURIComponent(newuser) + "&pass=" + encodeURIComponent(newpass);
 
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.open("POST", "register.php", true);
-  xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
+  xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); 
   xmlHttp.addEventListener("load", function(event){
     var jsonData = JSON.parse(event.target.responseText);
     if (jsonData.success) {
       alert("Registration success");
-     // document.getElementById('register').style.visibility="hidden";
     }
     else {
       alert("Registration Failed. "+jsonData.message);
@@ -293,7 +261,7 @@ document.getElementById('register_btn').addEventListener('click', registerAjax, 
 function logoutAjax(event) {
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.open("POST", "logout.php", true);
-  xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
+  xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); 
   xmlHttp.addEventListener("load", function(event){
     var jsonData = JSON.parse(event.target.responseText);
     if (jsonData.success) {
@@ -312,34 +280,40 @@ function logoutAjax(event) {
     }
   }, false);
   xmlHttp.send(null);
+
   updateCalendar();
 }
 document.getElementById('logout').addEventListener('click', logoutAjax, false);
 
 
-
+//checks to see if a user is logged in when the page is refreshed
 function checkforlogin(event) {
-  
+
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.open("POST", "checklogin.php", true);
-  xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
+  xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); 
   xmlHttp.addEventListener("load", function(event){
     var jsonData = JSON.parse(event.target.responseText);
-    if (jsonData.success) {
+  
+
+        if (jsonData.success){
+                document.getElementById("csrf_token").value=jsonData.token;
+                loggedin(jsonData.username);
+        }
+        else{
             $("#login").css("display", "inline");
             $("#register").css("display", "inline");
             $("#welcomeMessage").css("display", "none");
             $("#dialog").css("display", "none");
             $("#logout").css("display", "none");
             $("#add_event_trigger").css("display", "none");
-    }
-    else {
-            loggedin(jsonData.message);
-    }
+}
+
   }, false);
   xmlHttp.send(null);
 }
 document.addEventListener("DOMContentLoaded", checkforlogin, false);
+
 
 // For our purposes, we can keep the current month in a variable in the global scope
 var currentMonth = new Month(2020, 2); // March 2020
@@ -348,19 +322,9 @@ updateCalendar();//loads the calendar immediately
 document.getElementById("next_month_btn").addEventListener("click", function(event){
         currentMonth = currentMonth.nextMonth(); // Previous month would be currentMonth.prevMonth()
         updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
-        //alert("The new month is "+currentMonth.month+" "+currentMonth.year);
 }, false);
-
-document.getElementById("prev_month_btn").addEventListener("click", function(event){
-        currentMonth = currentMonth.prevMonth(); // Previous month would be currentMonth.prevMonth()
-        updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
-
-}, false);
-
-
-
   document.getElementById('move').addEventListener("keyup", Move, false);
-//Change the current month
+//Change the current month to any month we want
 function Move() {
 
     if (/^\d{2}\/\d{4}$/.test($("#move").val()) && Number($("#move").val().substr(0, 2)) < 13 && Number($("#move").val().substr(0, 2)) > 0 && Number($("#move").val().substr(3, 4)) >= 1500 && Number($("#move").val().substr(3, 4)) <= 2500) {

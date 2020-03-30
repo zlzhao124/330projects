@@ -7,7 +7,7 @@ ini_set("session.cookie_httponly", 1);
 
 $userName = (String)$_POST['username'];
 $password = (String)$_POST['pass'];
-
+//hashes the password
 $addPassword = password_hash($password, PASSWORD_DEFAULT);
 $stmt = $mysqli->prepare("insert into users (username, password) values (?, ?)");
 if(!$stmt){

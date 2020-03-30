@@ -10,14 +10,13 @@ session_start();
 $username = $_SESSION['username'];
 
 $eventid = $_POST['eventid'];
-
+//the event id contains the date followed by the title, so we split them
 $eventdate = substr($eventid, 0, 10);
-//echo($eventdate);
+
 $eventitle = substr($eventid, 11);
-//echo($eventitle);
 
 $edate = date('Y-m-d', strtotime($eventdate));
-//echo($edate);
+//creates a date string
 
 //Variables can be accessed as such and is equivalent to what I previously did with $_POST['username'] and $_POST['password']
 

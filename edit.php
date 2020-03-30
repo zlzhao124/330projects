@@ -13,9 +13,8 @@ $notes = $_POST['notes'];
 $eventid = $_POST['original_id'];
 
 $eventdate = substr($eventid, 5, 15);
-//echo($eventdate);
+
 $eventitle = substr($eventid, 16);
-//echo($eventitle);
 
 
 
@@ -29,8 +28,7 @@ if(!$stmt){
     printf("Query Prep Failed: %s\n", $mysqli->error);
     exit;
 }
-  // Check the username that was entered to make sure that it is not a duplicate, and that both the username and password are nonempty string
-
+  // edits time, title, and category for an event
 if (strlen($title)>0){
     $stmt->bind_param('ssssss', $title, $time, $notes, $eventitle, $eventdate, $username);
 
