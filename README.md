@@ -8,6 +8,7 @@ Helen Jiang instance: http://ec2-54-245-201-215.us-west-2.compute.amazonaws.com/
 Note: we used xmlHTTP requests instead of the newer fetch() calls because one of the group members couldn't figure out how the fetch() calls worked but the xmlHTTP requests for register and login were already working, so we decided to keep going with it. I know Professor Sproul encouraged us to use fetch(), but it didn't say that was the only way to do it; as long as we were making AJAX requests we believe we should earn full points.
 
 
+
 Creative Portion
 
 •We added a quick-move function: if a string in the form 'MM/YYYY' is typed into a textbox and the return key is hit after that is typed, the calendar will move automatically to that month and that year. According to Connor, this is worth 5 points and we have the piazza post to prove he said that.
